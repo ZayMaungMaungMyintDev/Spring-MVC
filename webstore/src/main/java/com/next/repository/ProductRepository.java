@@ -7,5 +7,7 @@ import com.next.domain.Product;
 public interface ProductRepository {
 	
 	List<Product> getAllProducts();
+	
+	Product getProductId(String productID);
 
 }
