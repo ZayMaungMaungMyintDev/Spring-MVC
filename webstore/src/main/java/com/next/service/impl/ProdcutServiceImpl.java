@@ -42,4 +42,14 @@ public class ProdcutServiceImpl implements ProductService {
 		return productRepository.getProductsByManufacturer(manufacturer);
 	}
 
+	@Override
+	public Set<Product> getProductsByPrice(Map<String, List<String>> filterParams) {
+		return productRepository.getProductsByPrice(filterParams);
+	}
+
+	@Override
+	public void addProduct(Product product) {
+		productRepository.addProduct(product);
+	}
+
 }

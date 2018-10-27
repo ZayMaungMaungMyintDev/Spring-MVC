@@ -11,7 +11,7 @@ import com.next.repository.CustomerRepository;
 @Repository
 public class CustomerRepositoryImpl implements CustomerRepository {
 	
-	List<Customer> listOfCustomers = new ArrayList<>();
+	List<Customer> listOfCustomers = new ArrayList<Customer>();
 
 	public CustomerRepositoryImpl() {
 		
