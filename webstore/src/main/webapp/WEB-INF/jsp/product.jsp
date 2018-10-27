@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,6 +22,11 @@
 
 	<section class="container">
 		<div class="row">
+			<div class="col-md-5">
+				<img alt="image"
+					src='<c:url value="/resources/images/${product.productId}.png"></c:url>'
+					style="width: 100%">
+			</div>
 			<div class="col-sm-5">
 				<div class="thumbnail">
 					<h3>${product.name}</h3>
@@ -40,15 +45,16 @@
 						<strong> Available units in stock : </strong>
 						${product.unitsInStock}
 					</p>
-					<h4>${product.unitPrice} USD</h4>
+					<h4>${product.unitPrice}USD</h4>
 					<p>
-						<a href="<spring:url value="/products"></spring:url>" class="btn	btn-warning	btn-large"> <span
+						<a href="<spring:url value="/products"></spring:url>"
+							class="btn	btn-warning	btn-large"> <span
 							class="glyphicon-shopping-cart	glyphicon"></span> Order Now
 						</a>
 					</p>
-					</div>
 				</div>
 			</div>
+		</div>
 	</section>
 
 </body>
