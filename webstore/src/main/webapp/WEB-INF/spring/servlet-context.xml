@@ -6,20 +6,56 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
-    
-    
-    <mvc:annotation-driven enable-matrix-variables="true"></mvc:annotation-driven>
-    <context:component-scan base-package="com.next"></context:component-scan>
-    
-    <mvc:resources location="/resources/" mapping="/resources/**"></mvc:resources>
-	
-	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+
+
+	<mvc:annotation-driven
+		enable-matrix-variables="true"></mvc:annotation-driven>
+	<context:component-scan base-package="com.next"></context:component-scan>
+
+	<mvc:resources location="/resources/"
+		mapping="/resources/**"></mvc:resources>
+
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/jsp/"></property>
 		<property name="suffix" value=".jsp"></property>
 	</bean>
-	
-	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="messages"></property>
 	</bean>
-	
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="50000000"></property>
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="defaultViews">
+			<list>
+				<ref bean="xmlView" />
+			</list>
+		</property>
+	</bean>
+
+<!-- 	<bean id="jsonView"
+		class="org.springframework.web.servlet.view.json.MappingJacksonJsonView">
+		<property name="prettyPrint" value="true" />
+	</bean> -->
+
+	<bean id="xmlView"
+		class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<constructor-arg>
+			<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+				<property name="classesToBeBound">
+					<list>
+						<value>com.next.domain.Product</value>
+					</list>
+				</property>
+			</bean>
+		</constructor-arg>
+	</bean>
+
 </beans>
