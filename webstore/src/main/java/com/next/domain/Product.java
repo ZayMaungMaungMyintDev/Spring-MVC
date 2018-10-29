@@ -1,7 +1,14 @@
 package com.next.domain;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.springframework.web.multipart.MultipartFile;
+
+@XmlRootElement
 public class Product {
-	
+
 	private String productId;
 	private String name;
 	private int unitPrice;
@@ -12,11 +19,15 @@ public class Product {
 	private long unitsInOrder;
 	private boolean discontinued;
 	private String condition;
-	
+
+	@JsonIgnore
+	private MultipartFile productImage;
+
+
 	public Product() {
 		super();
 	}
-	
+
 	public Product(String productId, String name, int unitPrice) {
 		this.productId = productId;
 		this.name = name;
@@ -103,6 +114,15 @@ public class Product {
 		this.condition = condition;
 	}
 
+	@XmlTransient
+	public MultipartFile getProductImage() {
+		return productImage;
+	}
+
+	public void setProductImage(MultipartFile productImage) {
+		this.productImage = productImage;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -132,5 +152,5 @@ public class Product {
 	public String toString() {
 		return "Product [productId=" + productId + ", name=" + name + "]";
 	}
-	
+
 }

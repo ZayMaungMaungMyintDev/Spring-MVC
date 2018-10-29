@@ -1,10 +1,13 @@
 package com.next.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.next.domain.Product;
@@ -34,6 +38,8 @@ public class ProductController {
 	@InitBinder
 	public void initialiseBinder(WebDataBinder binder) {
 		binder.setDisallowedFields("unitsInOrder", "discontinued");
+		binder.setAllowedFields("productId", "name", "unitPrice", "description", "condition" , "manufacturer", "category",
+				"unitsInStock", "productImage");
 	}
 
 	@RequestMapping
@@ -113,12 +119,26 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String processAddNewProductForm(@ModelAttribute("newProduct") Product newProduct , BindingResult result) {
+	public String processAddNewProductForm(@ModelAttribute("newProduct") Product newProduct, BindingResult result,
+			HttpServletRequest request) {
 		String[] suppressedFields = result.getSuppressedFields();
-		if(suppressedFields.length > 0) {
-			throw new RuntimeException("Attempting to bind disallowed fields:	" 
-		+ StringUtils.arrayToCommaDelimitedString(suppressedFields));
+		if (suppressedFields.length > 0) {
+			throw new RuntimeException("Attempting to bind disallowed fields:	"
+					+ StringUtils.arrayToCommaDelimitedString(suppressedFields));
 		}
+
+		MultipartFile productImage = newProduct.getProductImage();
+		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
+
+		if (productImage != null && !productImage.isEmpty()) {
+			try {
+				productImage.transferTo(
+						new File(rootDirectory + "resources\\images\\" + newProduct.getProductId() + ".png"));
+			} catch (Exception e) {
+				throw new RuntimeException("Product Image saving failed", e);
+			}
+		}
+		
 		productService.addProduct(newProduct);
 		return "redirect:/products";
 	}
